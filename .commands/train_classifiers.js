@@ -6,8 +6,10 @@ var request = require('request');
 var encoding = require('encoding');
 
 var ddpclient = new DDPClient({
-    host: "localhost",
-    port: 3000,
+    // host: "localhost",
+    // port: 3000,
+    host: "feedfilter.meteor.com",
+    port: 80,
 
     auto_reconnect: true,
     auto_reconnect_timer: 500,
