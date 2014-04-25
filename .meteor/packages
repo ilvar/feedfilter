@@ -6,8 +6,15 @@
 standard-app-packages
 insecure
 accounts-facebook
-accounts-google
 accounts-password
 bootstrap-3
-accounts-ui-bootstrap-3
 autopublish
+accounts-ui-bootstrap-3
+nlp
+feedparser
+cron-tick
+http
+require
+xml2js
+underscore
+iconv-lite

@@ -1,6 +1,12 @@
 {
   "packages": {
     "bootstrap-3": {},
-    "accounts-ui-bootstrap-3": {}
+    "accounts-ui-bootstrap-3": {},
+    "feedparser": {},
+    "cron-tick": {},
+    "nlp": {},
+    "require": {},
+    "xml2js": {},
+    "iconv-lite": {}
   }
 }

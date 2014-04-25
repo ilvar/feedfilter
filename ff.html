@@ -7,57 +7,103 @@
     <title>FeedFilter</title>
 
     <style>
-        body { padding-top: 70px; }
-        .feeds ul { padding-left: 0; }
-        .feeds ul li { list-style: none; }
-        .posts ul { padding-left: 0; }
-        .posts ul li { list-style: none; display: inline-table; float: none; width: 33%; }
-        .posts ul li .panel-body { max-height: 400px; overflow-y: auto; }
-        .posts ul li .btn { display: inline-block; }
-        .posts ul li h3 { display: inline-block; }
-        .posts ul li .panel-danger>.panel-heading { background-color: #ff8d87; }
-        .posts ul li .panel-success>.panel-heading { background-color: #a3daa1; }
-        img.logo { margin: -20px 0 -30px; }
+        body {
+            padding-top: 70px;
+        }
+
+        .feeds ul {
+            padding-left: 0;
+        }
+
+        .feeds ul li {
+            list-style: none;
+        }
+
+        .posts ul {
+            padding-left: 0;
+        }
+
+        .posts ul li {
+            list-style: none;
+            display: inline-table;
+            float: none;
+            width: 33%;
+            overflow-x: hidden;
+        }
+
+        .posts ul li .panel-body {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .posts ul li .panel-body img {
+            max-width: 100%;
+        }
+
+        .posts ul li .panel-body iframe {
+            max-width: 100%;
+        }
+
+        .posts ul li .btn {
+            display: inline-block;
+        }
+
+        .posts ul li h3 {
+            display: inline-block;
+        }
+
+        .posts ul li .panel-danger > .panel-heading {
+            background-color: #ff8d87;
+        }
+
+        .posts ul li .panel-success > .panel-heading {
+            background-color: #a3daa1;
+        }
+
+        img.logo {
+            margin: -20px 0 -30px;
+        }
     </style>
 </head>
 
 <body>
-    <!-- Fixed navbar -->
-    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">
-                <img src="picnic.png" class="logo" />
-                FeedFilter
-            </a>
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Feeds</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                {{> loginButtons align="right"}}
-            </ul>
-        </div>
-        <!--/.nav-collapse -->
+<!-- Fixed navbar -->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">
+            <img src="picnic.png" class="logo"/>
+            FeedFilter
+        </a>
     </div>
-
-    <div class="container-fluid">
-        {{#if currentUser}}
-            {{> posts}}
-        {{else}}
-            {{> hello}}
-        {{/if}}
+    <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Feeds</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            {{> loginButtons align="right"}}
+        </ul>
     </div>
-    <!-- /container -->
+    <!--/.nav-collapse -->
+</div>
 
-    <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<div class="container-fluid">
+    {{#if currentUser}}
+        {{> posts}}
+    {{else}}
+        {{> hello}}
+    {{/if}}
+</div>
+<!-- /container -->
+
+<script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
 </body>
 
 <template name="hello">
@@ -80,9 +126,10 @@
     <div class="row">
         <div class="col-md-4 col-lg-3 feeds">
             <h2 class="col-sm-12">Add feed</h2>
+
             <form class="add_feed row">
                 <div class="col-md-8">
-                    <input class="form-control" type="url" />
+                    <input class="form-control" type="url"/>
                 </div>
                 <div class="col-md-4">
                     <button type="button" class="btn btn-success btn-block">
@@ -94,31 +141,71 @@
             <br/>
 
             <table class="table">
-                <tr><th>URL</th></tr>
+                <tr>
+                    <th>URL</th>
+                </tr>
                 {{#each feeds }}
-                    {{#if url}}
-                        <tr><td>{{url}}</td></tr>
-                    {{/if}}
+                {{#if url}}
+                <tr>
+                    <td><a href="#" class="edit-feed" data-toggle="modal" data-target="#editFeed">{{feed_title}}</a></td>
+                </tr>
+                {{/if}}
                 {{/each }}
             </table>
         </div>
         <div class="col-md-8 col-lg-9 posts">
             <ul class="row">
                 {{#each posts }}
-                    <li class="col-md-6 col-lg-4">
-                        <div class="panel panel-{{panel_class}}">
-                            <div class="panel-heading">
-                                <button class="btn btn-xs btn-danger post-bad"><i class="ion ion-minus"></i></button>
-                                <h3 class="panel-title">{{title}}</h3>
-                                <button class="btn btn-xs btn-success post-good"><i class="ion ion-plus"></i></button>
-                            </div>
-                            <div class="panel-body">
-                                {{{summary}}}
-                            </div>
+                <li class="col-md-6 col-lg-4">
+                    <div class="panel panel-{{panel_class}}">
+                        <div class="panel-heading">
+                            <button class="btn btn-xs btn-danger post-bad"><i class="ion ion-minus"></i></button>
+                            <h3 class="panel-title">{{title}}</h3>
+                            <button class="btn btn-xs btn-success post-good"><i class="ion ion-plus"></i></button>
                         </div>
-                    </li>
+                        <div class="panel-body">
+                            {{{summary}}}
+                        </div>
+                    </div>
+                </li>
                 {{/each }}
             </ul>
         </div>
     </div>
+
+    <div class="modal fade edit-feed-window" id="editFeed" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Edit {{current_feed.url}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input class="title form-control" type="text" value="{{current_feed.title}}"/>
+                    </div>
+                    <div class="form-group">
+                        <label>URL</label>
+                        <input class="url form-control" type="url" value="{{current_feed.url}}"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Good words</label>
+                        <textarea class="good-words form-control">{{current_feed.good_words}}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Bad words</label>
+                        <textarea class="bad-words form-control">{{current_feed.bad_words}}</textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger ff-delete-feed" data-dismiss="modal">Delete</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 </template>

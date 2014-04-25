@@ -3,7 +3,13 @@
   "dependencies": {
     "basePackages": {
       "bootstrap-3": {},
-      "accounts-ui-bootstrap-3": {}
+      "accounts-ui-bootstrap-3": {},
+      "feedparser": {},
+      "cron-tick": {},
+      "nlp": {},
+      "require": {},
+      "xml2js": {},
+      "iconv-lite": {}
     },
     "packages": {
       "bootstrap-3": {
@@ -15,6 +21,41 @@
         "git": "https://github.com/mangasocial/meteor-accounts-ui-bootstrap-3.git",
         "tag": "v0.3.0-1",
         "commit": "93ffa5d0e325dc7026de89f6d90c178fa04bdd3a"
+      },
+      "feedparser": {
+        "git": "https://github.com/DBeath/meteor-feedparser.git",
+        "tag": "v0.16.3",
+        "commit": "6c1a67a542868b2331b2c189a9b2e6e1f2af7cd1"
+      },
+      "cron-tick": {
+        "git": "https://github.com/tmeasday/meteor-cron.git",
+        "tag": "v0.0.4",
+        "commit": "44cff9116af510fe53704fdeeff57c444ceb75ba"
+      },
+      "nlp": {
+        "git": "https://github.com/andreioprisan/meteor-nlp.git",
+        "tag": "v0.1.21",
+        "commit": "99367588b96a4458a17b62b950c28d758af57db3"
+      },
+      "require": {
+        "git": "https://github.com/tomconnors/meteor-require.git",
+        "tag": "v0.1.0",
+        "commit": "b9c5a87e9f92019cca882234086b7d32719f67e2"
+      },
+      "xml2js": {
+        "git": "https://github.com/peerlibrary/meteor-xml2js.git",
+        "tag": "v0.4.1-1",
+        "commit": "18aeb92fbbcdf916c66fb87a8617c4b86f376f91"
+      },
+      "iconv-lite": {
+        "git": "https://github.com/wulx/meteor-iconv-lite.git",
+        "tag": "v1.0.2",
+        "commit": "db0300ffc7954c9a3a52c6760bbf519d197a1983"
+      },
+      "blocking": {
+        "git": "https://github.com/peerlibrary/meteor-blocking.git",
+        "tag": "v0.4.0",
+        "commit": "e25a0be72e771b317b26d2bb5758c983bdcef23c"
       }
     }
   }
