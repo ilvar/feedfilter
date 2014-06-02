@@ -18,3 +18,4 @@ require
 xml2js
 underscore
 iconv-lite
+tinycon

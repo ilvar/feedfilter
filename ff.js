@@ -3,18 +3,28 @@ Posts = new Meteor.Collection("posts");
 
 if (Meteor.isClient) {
     Template.posts.posts = function() {
-        return Posts.find({read: {$ne: true}}, {sort: {category: 1}, limit: 50})
-    }
+        var posts = Posts.find({read: {$ne: true}}, {sort: {published_at: -1}});
+        posts.observeChanges({
+            added: function () {
+                Tinycon.setBubble(posts.count());
+            },
+            removed: function () {
+                Tinycon.setBubble(posts.count());
+            }
+        });
+        Tinycon.setBubble(posts.count());
+        return posts;
+    };
 
     Template.posts.feeds = function() {
         return Feeds.find()
-    }
+    };
 
     Template.posts.panel_class = function () {
         if (this.category == '1 good') { return 'success'; }
         if (this.category == '3 bad') { return 'danger'; }
         return 'default';
-    }
+    };
 
     Template.posts.feed_url = 'http://';
 
@@ -67,11 +77,12 @@ if (Meteor.isClient) {
         'click form.add_feed button': function (e) {
             var url = Session.get('feed_url');
             var existing = Feeds.findOne({url: url});
-            if (!existing) {
+            if (!existing && url) {
                 var fid = Feeds.insert({
                     url: url,
                     userId: Meteor.userId()
                 });
+                Template.posts.feed_url = 'http://';
             }
         }
     });
@@ -112,8 +123,45 @@ if (Meteor.isServer) {
             return params;
         }
 
+        function processRSS(data) {
+            var items = _.map(data.rss.channel[0].item, function(post) {
+                return {
+                    post_url: post.link[0] || post.guid[0]['_'],
+                    full_text: post.title[0] + ' ' + post.description[0],
+                    title: post.title[0],
+                    description: post.description[0],
+                    pubDate: post.pubDate[0]
+                }
+            });
+            return {
+                title: data.rss.channel[0].title,
+                items: items
+            }
+        }
+
+        function processAtom(data) {
+            var items = _.map(data.feed.entry, function(post) {
+                console.log(post);
+                return {
+                    url: post.link[0].href || post.id[0],
+                    full_text: post.title[0]._ + ' ' + post.summary[0]._ + ' ' + post.content[0]._,
+                    title: post.title[0]._,
+                    description: post.summary[0]._,
+                    pubDate: post.published[0]
+                }
+            });
+            return {
+                title: data.feed.title[0]._,
+                items: items
+            }
+        }
+
         function updateFeeds() {
             Feeds.find().forEach(function(feed) {
+                if (!feed.url || feed.url.substr(0, 4) != 'http') {
+                   return;
+                }
+
                 var natural = Nlp;
 
                 var restoredClassifier = feed.classifier && natural.BayesClassifier.restore(JSON.parse(feed.classifier));
@@ -134,31 +182,41 @@ if (Meteor.isServer) {
                     var charset = getParams(result.headers['content-type']).charset;
                     // TODO: decoding
 
-                    xml2js.parseString(result.content, function(err, data) {
-                        console.log(data.rss.channel[0].item[0].title[0]);
-                        _.each(data.rss.channel[0].item, function(post) {
-                            var post_url = post.link[0] || post.guid[0]['_'];
-                            var full_text = post.title + ' ' + post.summary;
-                            var cat = allow_classifying && restoredClassifier.classify(full_text);
+                    console.log('Updating', feed.url);
 
-                            if (_.any(bad_words, function(w) { return full_text.indexOf(w) > -1; })) {
+                    xml2js.parseString(result.content, function(err, data) {
+                        if (!data) { return };
+
+                        if (data.rss) {
+                            data = processRSS(data);
+                        }
+
+                        if (data.feed) {
+                            data = processAtom(data);
+                        }
+
+                        if (!feed.title) {
+                            Feeds.update(feed._id, {$set: {title: data.title}});
+                        }
+
+                        _.each(data.items, function(post) {
+                            var cat = allow_classifying && restoredClassifier.classify(post.full_text);
+
+                            if (_.any(bad_words, function(w) { return post.full_text.indexOf(w) > -1; })) {
                                 cat = '3 bad';
                             }
-                            if (_.any(good_words, function(w) { return full_text.indexOf(w) > -1; })) {
+                            if (_.any(good_words, function(w) { return post.full_text.indexOf(w) > -1; })) {
                                 cat = '1 good';
                             }
 
-                            var title = post.title[0];
-                            var description = post.description[0];
-
                             var update_data = {
-                                url: post_url,
+                                url: post.url,
                                 feedId: feed._id,
                                 userId: feed.userId,
-                                title: title,
-                                summary: description,
+                                title: post.title,
+                                summary: post.description,
                                 category: cat || '2 neutral',
-                                published_at: post.pubDate[0]
+                                published_at: post.pubDate
                             }
 
                             var existing = Posts.findOne({

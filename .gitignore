@@ -1,5 +1,8 @@
 .meteor/local/
+node_modules
 .idea
+
+ff.tgz
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

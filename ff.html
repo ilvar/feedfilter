@@ -4,6 +4,9 @@
 
     <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.4.1/css/ionicons.min.css"/>
 
+    <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+    <link rel="shortcut icon" href="/favicon.ico?v=2" type="image/x-icon" />
+
     <title>FeedFilter</title>
 
     <style>
@@ -27,17 +30,19 @@
             list-style: none;
             display: inline-table;
             float: none;
-            width: 33%;
+            width: 100%;
             overflow-x: hidden;
         }
 
         .posts ul li .panel-body {
-            max-height: 400px;
-            overflow-y: auto;
+            max-height: 600px;
+            overflow-y: hidden;
         }
 
         .posts ul li .panel-body img {
             max-width: 100%;
+            float: left;
+            margin-right: 5px;
         }
 
         .posts ul li .panel-body iframe {
@@ -124,7 +129,7 @@
 
 <template name="posts">
     <div class="row">
-        <div class="col-md-4 col-lg-3 feeds">
+        <div class="col-md-4 col-lg-2 feeds">
             <h2 class="col-sm-12">Add feed</h2>
 
             <form class="add_feed row">
@@ -153,18 +158,21 @@
                 {{/each }}
             </table>
         </div>
-        <div class="col-md-8 col-lg-9 posts">
+        <div class="col-md-8 col-lg-10 posts">
             <ul class="row">
                 {{#each posts }}
-                <li class="col-md-6 col-lg-4">
+                <li class="col-md-6 col-lg-6">
                     <div class="panel panel-{{panel_class}}">
                         <div class="panel-heading">
-                            <button class="btn btn-xs btn-danger post-bad"><i class="ion ion-minus"></i></button>
-                            <h3 class="panel-title">{{title}}</h3>
-                            <button class="btn btn-xs btn-success post-good"><i class="ion ion-plus"></i></button>
+                            <h3 class="panel-title"><a href="{{url}}">{{title}}</a></h3>
                         </div>
                         <div class="panel-body">
                             {{{summary}}}
+                            <p><a href="{{url}}">read all</a></p>
+                        </div>
+                        <div class="panel-footer">
+                            <button class="btn btn-xs btn-danger post-bad"><i class="ion ion-minus"></i> bad</button>
+                            <button class="btn btn-xs btn-success post-good"><i class="ion ion-plus"></i> good</button>
                         </div>
                     </div>
                 </li>

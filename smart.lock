@@ -9,7 +9,8 @@
       "nlp": {},
       "require": {},
       "xml2js": {},
-      "iconv-lite": {}
+      "iconv-lite": {},
+      "tinycon": {}
     },
     "packages": {
       "bootstrap-3": {
@@ -24,8 +25,8 @@
       },
       "feedparser": {
         "git": "https://github.com/DBeath/meteor-feedparser.git",
-        "tag": "v0.16.3",
-        "commit": "6c1a67a542868b2331b2c189a9b2e6e1f2af7cd1"
+        "tag": "v0.16.6",
+        "commit": "53c121f56949b6fe022dc8640087e1ad739db7d9"
       },
       "cron-tick": {
         "git": "https://github.com/tmeasday/meteor-cron.git",
@@ -51,6 +52,11 @@
         "git": "https://github.com/wulx/meteor-iconv-lite.git",
         "tag": "v1.0.2",
         "commit": "db0300ffc7954c9a3a52c6760bbf519d197a1983"
+      },
+      "tinycon": {
+        "git": "https://github.com/and-fri/meteor-tinycon.git",
+        "tag": "v0.0.1",
+        "commit": "3b67d0c483579d3147be538611e8b95e8e2cf31c"
       },
       "blocking": {
         "git": "https://github.com/peerlibrary/meteor-blocking.git",
